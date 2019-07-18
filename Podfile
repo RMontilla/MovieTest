@@ -6,5 +6,6 @@ target 'CraftsTestProject' do
   use_frameworks!
 
   # Pods for CraftsTestProject
+  pod 'Alamofire', '~> 5.0.0-beta.5'
 
 end
