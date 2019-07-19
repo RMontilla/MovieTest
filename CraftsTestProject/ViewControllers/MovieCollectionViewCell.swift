@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Kingfisher
 
 class MovieCollectionViewCell : UICollectionViewCell {
     
@@ -15,7 +16,24 @@ class MovieCollectionViewCell : UICollectionViewCell {
     @IBOutlet var titleLabel: UILabel!
     
     func configCell(withMovie movie : Movie){
-        self.posterImageView.image = UIImage(named: "")
-        self.titleLabel.text = movie.title
+        
+        titleLabel.text = movie.title
+        //self.posterImageView.kf.setImage(with: movie.posterURL)
+        
+        let url = movie.posterURL
+        let processor = DownsamplingImageProcessor(size: posterImageView.frame.size)
+        posterImageView.kf.indicatorType = .activity
+        posterImageView.kf.setImage(
+            with: url,
+            placeholder: nil,
+            options: [
+                .processor(processor),
+                .scaleFactor(UIScreen.main.scale),
+                .transition(.fade(1)),
+                .cacheOriginalImage
+            ])
+        {
+            result in
+        }
     }
 }

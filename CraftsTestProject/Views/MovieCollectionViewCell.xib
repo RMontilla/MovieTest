@@ -22,27 +22,34 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ctt-3z-S4O" userLabel="Content View">
                         <rect key="frame" x="0.0" y="0.0" width="219" height="186"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="KLt-ox-TMJ">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Fqp-g9-ESA">
                                 <rect key="frame" x="0.0" y="0.0" width="219" height="186"/>
-                                <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Fqp-g9-ESA">
-                                        <rect key="frame" x="0.0" y="0.0" width="219" height="169"/>
-                                    </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PxM-pD-MZP">
-                                        <rect key="frame" x="0.0" y="169" width="219" height="17"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                            </stackView>
+                            </imageView>
+                            <view alpha="0.25" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cRm-NQ-Ilt">
+                                <rect key="frame" x="0.0" y="171.5" width="219" height="14.5"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PxM-pD-MZP">
+                                <rect key="frame" x="0.0" y="171.5" width="219" height="14.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="KLt-ox-TMJ" firstAttribute="leading" secondItem="ctt-3z-S4O" secondAttribute="leading" id="85K-c5-rWE"/>
-                            <constraint firstItem="KLt-ox-TMJ" firstAttribute="top" secondItem="ctt-3z-S4O" secondAttribute="top" id="CiF-Bc-Oqg"/>
-                            <constraint firstAttribute="bottom" secondItem="KLt-ox-TMJ" secondAttribute="bottom" id="Inv-Nq-kIv"/>
-                            <constraint firstAttribute="trailing" secondItem="KLt-ox-TMJ" secondAttribute="trailing" id="g80-b8-7Ks"/>
+                            <constraint firstAttribute="bottom" secondItem="Fqp-g9-ESA" secondAttribute="bottom" id="2DZ-ic-fFi"/>
+                            <constraint firstItem="PxM-pD-MZP" firstAttribute="leading" secondItem="ctt-3z-S4O" secondAttribute="leading" id="4fK-1f-5Wt"/>
+                            <constraint firstAttribute="bottom" secondItem="cRm-NQ-Ilt" secondAttribute="bottom" id="6FK-io-l2A"/>
+                            <constraint firstItem="cRm-NQ-Ilt" firstAttribute="leading" secondItem="ctt-3z-S4O" secondAttribute="leading" id="6sH-2C-ebu"/>
+                            <constraint firstItem="PxM-pD-MZP" firstAttribute="top" secondItem="cRm-NQ-Ilt" secondAttribute="top" id="9m8-uc-4b5"/>
+                            <constraint firstItem="Fqp-g9-ESA" firstAttribute="top" secondItem="ctt-3z-S4O" secondAttribute="top" id="ayu-O8-C53"/>
+                            <constraint firstItem="PxM-pD-MZP" firstAttribute="bottom" secondItem="cRm-NQ-Ilt" secondAttribute="bottom" id="bqV-cI-kho"/>
+                            <constraint firstItem="Fqp-g9-ESA" firstAttribute="leading" secondItem="ctt-3z-S4O" secondAttribute="leading" id="tYu-Yh-5fV"/>
+                            <constraint firstAttribute="trailing" secondItem="Fqp-g9-ESA" secondAttribute="trailing" id="tgp-ab-qP3"/>
+                            <constraint firstItem="PxM-pD-MZP" firstAttribute="centerY" secondItem="cRm-NQ-Ilt" secondAttribute="centerY" id="v3Y-Cv-VC8"/>
+                            <constraint firstAttribute="trailing" secondItem="PxM-pD-MZP" secondAttribute="trailing" id="vPC-ur-54W"/>
+                            <constraint firstAttribute="trailing" secondItem="cRm-NQ-Ilt" secondAttribute="trailing" id="y3b-xm-aO4"/>
                         </constraints>
                     </view>
                 </subviews>

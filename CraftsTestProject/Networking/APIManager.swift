@@ -15,15 +15,28 @@ public enum MovieError: Error {
     case serializationError
 }
 
+public enum Endpoint: String, CaseIterable {
+    case popular
+    case topRated = "top_rated"
+    
+    public init?(index: Int) {
+        switch index {
+        case 0: self = .popular
+        case 1: self = .topRated
+        default: return nil
+        }
+    }
+}
+
 class APIManager {
     
     public static let shared = APIManager()
     private init() {}
     
     private let kAppIDKey = "api_key"
+    private let kPageKey = "page"
     private let apiKey = "212371b21a995c180eedaf8a8ec8e49e"
     private let baseAPIURL = "https://api.themoviedb.org/3/movie/"
-    private let nowPlayingMethod = "now_playing"
     
     private let jsonDecoder: JSONDecoder = {
         let jsonDecoder = JSONDecoder()
@@ -34,10 +47,11 @@ class APIManager {
         return jsonDecoder
     }()
     
-    func fetchMovies (completion: @escaping (Result<[Movie], MovieError>) -> Void) {
+    func fetchMovies ( endpoint : Endpoint, page : Int, completion: @escaping (Result<[Movie], MovieError>) -> Void) {
         
-        let url = baseAPIURL + nowPlayingMethod
-        let params = [ kAppIDKey : apiKey]
+        let url = baseAPIURL + endpoint.rawValue
+        let params = [ kAppIDKey : apiKey,
+                       kPageKey : "\(page)"]
         AF.request(url, parameters : params)
                 .validate()
                 .responseJSON(completionHandler: { (response) in
