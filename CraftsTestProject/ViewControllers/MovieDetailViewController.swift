@@ -58,9 +58,9 @@ class MovieDetailViewController: BaseViewController {
         }
         
         posterImageView.kf.setImage(with: movie.posterURL)
-        titleLabel.text = movie.title
-        originalTitleLabel.text = "\(movie.originalTitle) (original title)"
-        releaseDateLabel.text = dateFormatter.string(from: movie.releaseDate)
+        titleLabel.text = movie.title ?? ""
+        originalTitleLabel.text = movie.originalTitle != nil ? "\(movie.originalTitle!) (original title)" : ""
+        releaseDateLabel.text = movie.releaseDate != nil ? dateFormatter.string(from: movie.releaseDate!) : ""
         synopsisLabel.text = movie.overview
         
         userRatingLabel.text = "⭐️ \(movie.voteAverage)/10"
@@ -68,9 +68,10 @@ class MovieDetailViewController: BaseViewController {
         popularityLabel.text = "\(movie.popularity)"
         
         
-        let realm = try! Realm()
-        let movieArray = realm.objects(Movie.self).filter { $0.id == movie.id}
-        likeButton.isSelected = movieArray.count > 0
+        //let realm = try! Realm()
+        //let movieArray = realm.objects(Movie.self).filter { $0.id == movie.id}
+        likeButton.isSelected = movie.isMovieLiked()
+        likeButton.backgroundColor = likeButton.isSelected ? .green : .lightGray
     }
 
     override func viewDidLoad() {
@@ -85,7 +86,6 @@ class MovieDetailViewController: BaseViewController {
 
     @IBAction func likeButtonTapped(_ sender: UIButton) {
         
-        sender.backgroundColor = sender.isSelected ? .green : .lightGray
         sender.pulsate()
         
         let realm = try! Realm()
@@ -104,6 +104,8 @@ class MovieDetailViewController: BaseViewController {
             }
             sender.isSelected = true
         }
+        
+        sender.backgroundColor = sender.isSelected ? .green : .lightGray
     }
 }
 

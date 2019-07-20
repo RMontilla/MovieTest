@@ -35,14 +35,41 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Y8-zq-r4e">
+                                <rect key="frame" x="184" y="10" width="25" height="25"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="thumb-up-white" translatesAutoresizingMaskIntoConstraints="NO" id="Knx-mu-4Gq">
+                                        <rect key="frame" x="4" y="4" width="17.5" height="17.5"/>
+                                        <color key="backgroundColor" red="0.035294117649999998" green="0.70980392160000005" blue="0.48627450979999998" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="Knx-mu-4Gq" secondAttribute="height" multiplier="1:1" id="bNV-db-KtF"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.035294117649999998" green="0.70980392160000005" blue="0.48627450979999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="3Y8-zq-r4e" secondAttribute="height" multiplier="1:1" id="5ky-7D-IPe"/>
+                                    <constraint firstAttribute="height" constant="25" id="OSM-we-a1u"/>
+                                    <constraint firstItem="Knx-mu-4Gq" firstAttribute="centerY" secondItem="3Y8-zq-r4e" secondAttribute="centerY" id="YcD-5p-fU0"/>
+                                    <constraint firstItem="Knx-mu-4Gq" firstAttribute="height" secondItem="3Y8-zq-r4e" secondAttribute="height" multiplier="0.7" id="d52-qQ-sJu"/>
+                                    <constraint firstItem="Knx-mu-4Gq" firstAttribute="centerX" secondItem="3Y8-zq-r4e" secondAttribute="centerX" id="l08-39-1Zr"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <real key="value" value="12.5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="Fqp-g9-ESA" secondAttribute="bottom" id="2DZ-ic-fFi"/>
                             <constraint firstItem="PxM-pD-MZP" firstAttribute="leading" secondItem="ctt-3z-S4O" secondAttribute="leading" id="4fK-1f-5Wt"/>
                             <constraint firstAttribute="bottom" secondItem="cRm-NQ-Ilt" secondAttribute="bottom" id="6FK-io-l2A"/>
+                            <constraint firstAttribute="trailing" secondItem="3Y8-zq-r4e" secondAttribute="trailing" constant="10" id="6HJ-HO-7yF"/>
                             <constraint firstItem="cRm-NQ-Ilt" firstAttribute="leading" secondItem="ctt-3z-S4O" secondAttribute="leading" id="6sH-2C-ebu"/>
                             <constraint firstItem="PxM-pD-MZP" firstAttribute="top" secondItem="cRm-NQ-Ilt" secondAttribute="top" id="9m8-uc-4b5"/>
+                            <constraint firstItem="3Y8-zq-r4e" firstAttribute="top" secondItem="ctt-3z-S4O" secondAttribute="top" constant="10" id="Sia-pP-bl4"/>
                             <constraint firstItem="Fqp-g9-ESA" firstAttribute="top" secondItem="ctt-3z-S4O" secondAttribute="top" id="ayu-O8-C53"/>
                             <constraint firstItem="PxM-pD-MZP" firstAttribute="bottom" secondItem="cRm-NQ-Ilt" secondAttribute="bottom" id="bqV-cI-kho"/>
                             <constraint firstItem="Fqp-g9-ESA" firstAttribute="leading" secondItem="ctt-3z-S4O" secondAttribute="leading" id="tYu-Yh-5fV"/>
@@ -64,10 +91,14 @@
             <viewLayoutGuide key="safeArea" id="mUE-B1-uZO"/>
             <size key="customSize" width="219" height="186"/>
             <connections>
+                <outlet property="likeView" destination="3Y8-zq-r4e" id="DjP-Ek-47z"/>
                 <outlet property="posterImageView" destination="Fqp-g9-ESA" id="0pv-cp-H8r"/>
                 <outlet property="titleLabel" destination="PxM-pD-MZP" id="lvs-ZE-slu"/>
             </connections>
             <point key="canvasLocation" x="218.11594202898553" y="62.276785714285708"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="thumb-up-white" width="40" height="40"/>
+    </resources>
 </document>

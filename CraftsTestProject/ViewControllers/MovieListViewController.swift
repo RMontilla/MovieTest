@@ -20,9 +20,11 @@ class MovieListViewController: BaseViewController {
     var detailViewController: MovieDetailViewController? = nil
     var movies : [Movie]? {
         didSet {
+            guard let movieCount = self.movies?.count else { return }
             DispatchQueue.main.async {
                 self.movieCollectionView.reloadData()
             }
+            
         }
     }
     
@@ -122,7 +124,7 @@ extension MovieListViewController : UICollectionViewDelegate {
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
         
-        if offsetY > contentHeight - scrollView.frame.height && !refreshing {
+        if offsetY > contentHeight - scrollView.frame.height - 40 && !refreshing {
             fetchMovieBatch()
         }
     }

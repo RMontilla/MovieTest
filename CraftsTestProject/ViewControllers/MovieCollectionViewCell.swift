@@ -14,11 +14,12 @@ class MovieCollectionViewCell : UICollectionViewCell {
     
     @IBOutlet var posterImageView: UIImageView!
     @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var likeView: UIView!
     
     func configCell(withMovie movie : Movie){
         
         titleLabel.text = movie.title
-        //self.posterImageView.kf.setImage(with: movie.posterURL)
+        likeView.isHidden = !movie.isMovieLiked()
         
         let url = movie.posterURL
         let processor = DownsamplingImageProcessor(size: posterImageView.frame.size)
