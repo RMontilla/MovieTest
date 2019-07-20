@@ -81,10 +81,7 @@ class MovieListViewController: BaseViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case "showDetail":
-            
-            guard let cell = sender as? UICollectionViewCell else { return }
-            guard let indexPath = self.movieCollectionView!.indexPath(for: cell) else { return }
-            guard let movie = movies?[indexPath.row] else { return }
+            guard let movie = sender as? Movie else { return }
             guard let detailViewController = (segue.destination as! UINavigationController).topViewController as? MovieDetailViewController else { return }
             detailViewController.movie = movie
             
@@ -116,8 +113,12 @@ extension MovieListViewController : UICollectionViewDataSource {
 
 extension MovieListViewController : UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) else { return }
-        performSegue(withIdentifier: "showDetail", sender: cell)
+        guard let movie = movies?[indexPath.row] else { return }
+        if UI_USER_INTERFACE_IDIOM() == .pad{
+            detailViewController?.movie = movie
+        } else {
+            performSegue(withIdentifier: "showDetail", sender: movie)
+        }
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
