@@ -8,6 +8,7 @@
 
 import UIKit
 import Kingfisher
+import RealmSwift
 
 class MovieDetailViewController: BaseViewController {
     
@@ -65,6 +66,11 @@ class MovieDetailViewController: BaseViewController {
         userRatingLabel.text = "⭐️ \(movie.voteAverage)/10"
         voteCountLabel.text = "(based on \(Double(movie.voteCount)) ratings)"
         popularityLabel.text = "\(movie.popularity)"
+        
+        
+        let realm = try! Realm()
+        let movieArray = realm.objects(Movie.self).filter { $0.id == movie.id}
+        likeButton.isSelected = movieArray.count > 0
     }
 
     override func viewDidLoad() {
@@ -78,9 +84,26 @@ class MovieDetailViewController: BaseViewController {
     }
 
     @IBAction func likeButtonTapped(_ sender: UIButton) {
-        sender.isSelected = !sender.isSelected
+        
         sender.backgroundColor = sender.isSelected ? .green : .lightGray
         sender.pulsate()
+        
+        let realm = try! Realm()
+        guard let movie = movie else { return }
+        let movieArray = realm.objects(Movie.self).filter { $0.id == movie.id}
+        
+        if  movieArray.count > 0{
+            let movieToRemove = movieArray[0]
+            try! realm.write {
+                realm.delete(movieToRemove)
+            }
+            sender.isSelected = false
+        } else {
+            try! realm.write {
+                realm.add(movie)
+            }
+            sender.isSelected = true
+        }
     }
 }
 

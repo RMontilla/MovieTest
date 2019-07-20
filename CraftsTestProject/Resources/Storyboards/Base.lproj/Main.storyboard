@@ -194,7 +194,7 @@
                                                                 <rect key="frame" x="123.5" y="8" width="250.5" height="163"/>
                                                                 <subviews>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="synopsis" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EeI-1u-rGP">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="250.5" height="17"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="250.5" height="163"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <nil key="highlightedColor"/>
@@ -206,6 +206,7 @@
                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="trailing" secondItem="EeI-1u-rGP" secondAttribute="trailing" id="0Pl-ZV-WIx"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="EeI-1u-rGP" secondAttribute="bottom" id="1Bv-tu-AW1"/>
                                                                     <constraint firstItem="EeI-1u-rGP" firstAttribute="top" secondItem="vBO-yR-Mt8" secondAttribute="top" id="Yaq-e7-aee"/>
                                                                     <constraint firstItem="EeI-1u-rGP" firstAttribute="leading" secondItem="vBO-yR-Mt8" secondAttribute="leading" id="tQY-D4-x9g"/>
                                                                 </constraints>

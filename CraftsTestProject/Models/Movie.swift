@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RealmSwift
 
 public struct MoviesResponse: Codable {
     public let page: Int
@@ -15,17 +16,17 @@ public struct MoviesResponse: Codable {
     public let results: [Movie]
 }
 
-public struct Movie: Codable {
-    public let id: Int
-    public let title: String
-    public let originalTitle: String
-    public let popularity: Double
-    public let backdropPath: String?
-    public let posterPath: String?
-    public let overview: String
-    public let releaseDate: Date
-    public let voteAverage: Double
-    public let voteCount: Int
+public class Movie: Object, Codable {
+    @objc dynamic var id: Int
+    @objc dynamic var title: String
+    @objc dynamic var originalTitle: String
+    @objc dynamic var popularity: Double
+    @objc dynamic var backdropPath: String?
+    @objc dynamic var posterPath: String?
+    @objc dynamic var overview: String
+    @objc dynamic var releaseDate: Date
+    @objc dynamic var voteAverage: Double
+    @objc dynamic var voteCount: Int
     public var posterURL: URL {
         return URL(string: "https://image.tmdb.org/t/p/w500\(posterPath ?? "")")!
     }
