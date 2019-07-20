@@ -10,5 +10,6 @@ target 'CraftsTestProject' do
   pod 'Kingfisher', '~> 5.7.0'
   pod 'MBProgressHUD', '~> 1.1.0'
   pod 'RealmSwift'
+  pod 'SwiftLint'
 
 end
