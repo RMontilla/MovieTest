@@ -8,5 +8,6 @@ target 'CraftsTestProject' do
   # Pods for CraftsTestProject
   pod 'Alamofire', '~> 5.0.0-beta.5'
   pod 'Kingfisher', '~> 5.7.0'
+  pod 'MBProgressHUD', '~> 1.1.0'
 
 end

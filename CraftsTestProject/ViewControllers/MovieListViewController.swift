@@ -7,18 +7,22 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class MovieListViewController: BaseViewController {
     
     @IBOutlet var segmentedControl: UISegmentedControl!
     @IBOutlet var movieCollectionView: UICollectionView!
+    @IBOutlet var paginationLoadingDisplayView: UIView!
     
     private let kCellIdentifier = "MovieCollectionViewCell"
     
     var detailViewController: MovieDetailViewController? = nil
     var movies : [Movie]? {
         didSet {
-            movieCollectionView.reloadData()
+            DispatchQueue.main.async {
+                self.movieCollectionView.reloadData()
+            }
         }
     }
     
@@ -43,7 +47,9 @@ class MovieListViewController: BaseViewController {
         let page = ((movies?.count ?? 0)/20) + 1
         guard let endpoint = Endpoint(index: segmentedControl.selectedSegmentIndex) else { return }
         
+        MBProgressHUD.showAdded(to: self.paginationLoadingDisplayView, animated: true)
         APIManager.shared.fetchMovies(endpoint: endpoint, page: page) { (result) in
+            MBProgressHUD.hide(for: self.paginationLoadingDisplayView, animated: true)
             
             switch result {
             case .success(let newBatch):

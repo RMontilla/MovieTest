@@ -52,13 +52,23 @@
                                     <outlet property="delegate" destination="JhD-Bc-1rz" id="Q20-U5-A9l"/>
                                 </connections>
                             </collectionView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GYZ-8e-zsJ">
+                                <rect key="frame" x="182" y="698" width="50" height="50"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="eyb-fD-vBK"/>
+                                    <constraint firstAttribute="width" constant="50" id="gAZ-8w-w8h"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="GYZ-8e-zsJ" firstAttribute="centerX" secondItem="c8f-60-rQw" secondAttribute="centerX" id="Hmv-Mj-psj"/>
                             <constraint firstItem="c8f-60-rQw" firstAttribute="leading" secondItem="1lM-8E-cB1" secondAttribute="leading" id="J3V-TW-Zhy"/>
                             <constraint firstItem="c8f-60-rQw" firstAttribute="trailing" secondItem="1lM-8E-cB1" secondAttribute="trailing" id="frp-Ww-h6I"/>
                             <constraint firstItem="1lM-8E-cB1" firstAttribute="top" secondItem="c8f-60-rQw" secondAttribute="top" id="hli-bc-gd5"/>
                             <constraint firstAttribute="bottom" secondItem="c8f-60-rQw" secondAttribute="bottom" id="ksy-Jy-WAN"/>
+                            <constraint firstItem="GYZ-8e-zsJ" firstAttribute="bottom" secondItem="c8f-60-rQw" secondAttribute="bottom" constant="-60" id="zig-DC-J1G"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="1lM-8E-cB1"/>
                     </view>
@@ -80,6 +90,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="movieCollectionView" destination="c8f-60-rQw" id="Zuh-cM-Fx5"/>
+                        <outlet property="paginationLoadingDisplayView" destination="GYZ-8e-zsJ" id="EYI-5G-nZd"/>
                         <outlet property="segmentedControl" destination="eDP-Ax-Csu" id="wtb-MY-hgG"/>
                         <segue destination="vC3-pB-5Vb" kind="showDetail" identifier="showDetail" id="Hhw-I1-647"/>
                     </connections>
