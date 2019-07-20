@@ -11,7 +11,6 @@ import Kingfisher
 import RealmSwift
 
 class MovieDetailViewController: BaseViewController {
-    
     // MARK: - Outlets
     @IBOutlet var backdropImageView: UIImageView!
     @IBOutlet var posterImageView: UIImageView!
@@ -23,38 +22,35 @@ class MovieDetailViewController: BaseViewController {
     @IBOutlet var voteCountLabel: UILabel!
     @IBOutlet var popularityLabel: UILabel!
     @IBOutlet var likeButton: UIButton!
-    
-    
-    //MARK: - Variables
+    // MARK: - Variables
     let dateFormatter: DateFormatter = {
         $0.dateStyle = .medium
         $0.timeStyle = .none
         return $0
     }(DateFormatter())
-    
-    var movie : Movie? {
+
+    var movie: Movie? {
         didSet {
             configureView()
         }
     }
 
-    //MARK: - Lifecycle methods
+    // MARK: - Lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         configureView()
     }
 
     // MARK: - Private methods
-    
     private func configureView() {
         // Update the user interface for the detail item.
         guard let movie = movie else { return }
         guard let backdropImageView = self.backdropImageView else { return }
-        
+
         let processor = DownsamplingImageProcessor(size: posterImageView.frame.size)
         backdropImageView.kf.indicatorType = .activity
         backdropImageView.kf.setImage(
@@ -65,42 +61,35 @@ class MovieDetailViewController: BaseViewController {
                 .scaleFactor(UIScreen.main.scale),
                 .transition(.fade(1)),
                 .cacheOriginalImage
-            ])
-        {
-            result in
+            ]) { _ in
         }
-        
+
         posterImageView.kf.setImage(with: movie.posterURL)
         titleLabel.text = movie.title ?? ""
         originalTitleLabel.text = movie.originalTitle != nil ? "\(movie.originalTitle!) (original title)" : ""
         releaseDateLabel.text = movie.releaseDate != nil ? dateFormatter.string(from: movie.releaseDate!) : ""
         synopsisLabel.text = movie.overview
-        
         userRatingLabel.text = "⭐️ \(movie.voteAverage)/10"
         voteCountLabel.text = "(based on \(Double(movie.voteCount)) ratings)"
         popularityLabel.text = "\(movie.popularity)"
-        
+
         likeButton.isSelected = movie.isMovieLiked()
         likeButton.backgroundColor = likeButton.isSelected ? .green : .lightGray
     }
 
     // MARK: - Actions
-    
     @IBAction func likeButtonTapped(_ sender: UIButton) {
-        
         sender.pulsate()
         guard let movie = movie else { return }
 
         //Save or delete movie
-        if movie.isMovieLiked(){
+        if movie.isMovieLiked() {
             movie.delete()
             sender.isSelected = false
         } else {
             movie.save()
             sender.isSelected = true
         }
-        
         sender.backgroundColor = sender.isSelected ? .green : .lightGray
     }
 }
-

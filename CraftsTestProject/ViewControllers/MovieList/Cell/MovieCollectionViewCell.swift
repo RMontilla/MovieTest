@@ -10,17 +10,15 @@ import Foundation
 import UIKit
 import Kingfisher
 
-class MovieCollectionViewCell : UICollectionViewCell {
-    
+class MovieCollectionViewCell: UICollectionViewCell {
     @IBOutlet var posterImageView: UIImageView!
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var likeView: UIView!
-    
-    func configCell(withMovie movie : Movie){
-        
+
+    func configCell(withMovie movie: Movie) {
         titleLabel.text = movie.title
         likeView.isHidden = !movie.isMovieLiked()
-        
+
         let url = movie.posterURL
         let processor = DownsamplingImageProcessor(size: posterImageView.frame.size)
         posterImageView.kf.indicatorType = .activity
@@ -32,9 +30,7 @@ class MovieCollectionViewCell : UICollectionViewCell {
                 .scaleFactor(UIScreen.main.scale),
                 .transition(.fade(1)),
                 .cacheOriginalImage
-            ])
-        {
-            result in
+            ]) { _ in
         }
     }
 }

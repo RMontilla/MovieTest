@@ -76,9 +76,8 @@
 		EA55072E22E105E30051C3AF /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				EA7B738022E1020700117D2F /* MovieListViewController.swift */,
-				EA7B738222E1020700117D2F /* MovieDetailViewController.swift */,
-				EA55075A22E12CC00051C3AF /* MovieCollectionViewCell.swift */,
+				EAB2A62222E3A9A3007B83F8 /* MovieDetail */,
+				EAB2A62022E3A96D007B83F8 /* MovieList */,
 				EAC5124722E214D500BE7FDF /* BaseViewController.swift */,
 				EADD892D22E38FDE0066CC45 /* MasterSplitViewController.swift */,
 			);
@@ -122,7 +121,6 @@
 		EA55075722E129230051C3AF /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				EA55075822E12B6D0051C3AF /* MovieCollectionViewCell.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -161,6 +159,32 @@
 			path = CraftsTestProject;
 			sourceTree = "<group>";
 		};
+		EAB2A62022E3A96D007B83F8 /* MovieList */ = {
+			isa = PBXGroup;
+			children = (
+				EAB2A62122E3A980007B83F8 /* Cell */,
+				EA7B738022E1020700117D2F /* MovieListViewController.swift */,
+			);
+			path = MovieList;
+			sourceTree = "<group>";
+		};
+		EAB2A62122E3A980007B83F8 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				EA55075822E12B6D0051C3AF /* MovieCollectionViewCell.xib */,
+				EA55075A22E12CC00051C3AF /* MovieCollectionViewCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		EAB2A62222E3A9A3007B83F8 /* MovieDetail */ = {
+			isa = PBXGroup;
+			children = (
+				EA7B738222E1020700117D2F /* MovieDetailViewController.swift */,
+			);
+			path = MovieDetail;
+			sourceTree = "<group>";
+		};
 		EAC5124922E2413E00BE7FDF /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -182,6 +206,7 @@
 				EA7B737822E1020700117D2F /* Frameworks */,
 				EA7B737922E1020700117D2F /* Resources */,
 				9EF93975250186D19D7E37B8 /* [CP] Embed Pods Frameworks */,
+				EAB2A62322E3B14A007B83F8 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -291,6 +316,23 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		EAB2A62322E3B14A007B83F8 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

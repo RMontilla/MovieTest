@@ -33,24 +33,41 @@ public class Movie: Object, Codable {
     public var backdropURL: URL {
         return URL(string: "https://image.tmdb.org/t/p/original\(backdropPath ?? "")")!
     }
-    
+
     override public class func primaryKey() -> String? {
         return "id"
     }
-    
-    public func isMovieLiked() -> Bool {
-        let realm = try! Realm()
-        let movieArray = realm.objects(Movie.self).filter { $0.id == self.id}
-        return movieArray.count > 0
+
+    // MARK: - Realm methods
+    @discardableResult public func isMovieLiked() -> Bool {
+        do {
+            let realm = try Realm()
+            let movieArray = realm.objects(Movie.self).filter { $0.id == self.id}
+            return movieArray.count > 0
+        } catch _ {
+            return false
+        }
     }
-    
-    public func delete() {
-        let realm = try! Realm()
-        realm.delete(self)
+
+    @discardableResult public func delete() -> Bool {
+        do {
+            let realm = try Realm()
+            realm.delete(self)
+            return true
+        } catch _ {
+            return false
+        }
     }
-    
-    public func save() {
-        let realm = try! Realm()
-        realm.add(self)
+
+    @discardableResult public func save() -> Bool {
+        do {
+            let realm = try Realm()
+            try realm.write {
+                realm.add(self)
+            }
+            return true
+        } catch _ {
+            return false
+        }
     }
 }

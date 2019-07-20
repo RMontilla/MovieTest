@@ -18,7 +18,7 @@ public enum MovieError: Error {
 public enum Endpoint: String, CaseIterable {
     case popular
     case topRated = "top_rated"
-    
+
     public init?(index: Int) {
         switch index {
         case 0: self = .popular
@@ -29,16 +29,15 @@ public enum Endpoint: String, CaseIterable {
 }
 
 class APIManager {
-    
+
     public static let shared = APIManager()
     private init() {}
-    
     private let kAppIDKey = "api_key"
     private let kPageKey = "page"
     private let kLanguageKey = "language"
     private let apiKey = "212371b21a995c180eedaf8a8ec8e49e"
     private let baseAPIURL = "https://api.themoviedb.org/3/movie/"
-    
+
     private let jsonDecoder: JSONDecoder = {
         let jsonDecoder = JSONDecoder()
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
@@ -47,23 +46,20 @@ class APIManager {
         jsonDecoder.dateDecodingStrategy = .formatted(dateFormatter)
         return jsonDecoder
     }()
-    
-    func fetchMovies ( endpoint : Endpoint, page : Int, completion: @escaping (Result<[Movie], MovieError>) -> Void) {
-        
+
+    func fetchMovies (endpoint: Endpoint, page: Int, completion: @escaping (Result<[Movie], MovieError>) -> Void) {
         let url = baseAPIURL + endpoint.rawValue
         let langStr = Locale.current.identifier
-        let params = [ kAppIDKey : apiKey,
-                       kPageKey : "\(page)",
-                       kLanguageKey : langStr]
-        
-        AF.request(url, parameters : params)
+        let params = [ kAppIDKey: apiKey,
+                       kPageKey: "\(page)",
+                       kLanguageKey: langStr]
+
+        AF.request(url, parameters: params)
                 .validate()
                 .responseJSON(completionHandler: { (response) in
-                    
                     if response.error != nil {
                         completion(.failure(.apiError))
                     }
-                    
                     guard let data = response.data else {
                         completion(.failure(.noData))
                         return
@@ -76,7 +72,4 @@ class APIManager {
                     }
         })
     }
-    
 }
-
-

@@ -9,14 +9,13 @@
 import Foundation
 import UIKit
 
-class MasterSplitViewController :UISplitViewController, UISplitViewControllerDelegate {
+class MasterSplitViewController: UISplitViewController, UISplitViewControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.delegate = self
         self.preferredDisplayMode = .allVisible
     }
-    
+
     func splitViewController(
         _ splitViewController: UISplitViewController,
         collapseSecondary secondaryViewController: UIViewController,
@@ -24,5 +23,4 @@ class MasterSplitViewController :UISplitViewController, UISplitViewControllerDel
         // Return true to prevent UIKit from applying its default behavior
         return true
     }
-    
 }
