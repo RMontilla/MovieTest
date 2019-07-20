@@ -9,37 +9,78 @@
 import UIKit
 import Kingfisher
 
-class MovieDetailViewController: UIViewController {
+class MovieDetailViewController: BaseViewController {
     
     @IBOutlet var backdropImageView: UIImageView!
+    @IBOutlet var posterImageView: UIImageView!
     
-    var movie : Movie?
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var originalTitleLabel: UILabel!
+    @IBOutlet var releaseDateLabel: UILabel!
+    @IBOutlet var synopsisLabel: UILabel!
+    @IBOutlet var userRatingLabel: UILabel!
+    @IBOutlet var voteCountLabel: UILabel!
+    
+    @IBOutlet var popularityLabel: UILabel!
+    @IBOutlet var likeButton: UIButton!
+    
+    let dateFormatter: DateFormatter = {
+        $0.dateStyle = .medium
+        $0.timeStyle = .none
+        return $0
+    }(DateFormatter())
+    
+    var movie : Movie? {
+        didSet {
+            configureView()
+        }
+    }
 
     func configureView() {
         // Update the user interface for the detail item.
         guard let movie = movie else { return }
-        backdropImageView.kf.setImage(with: movie.backdropURL)
+        guard let backdropImageView = self.backdropImageView else { return }
+        
+        let processor = DownsamplingImageProcessor(size: posterImageView.frame.size)
+        backdropImageView.kf.indicatorType = .activity
+        backdropImageView.kf.setImage(
+            with: movie.backdropURL,
+            placeholder: nil,
+            options: [
+                .processor(processor),
+                .scaleFactor(UIScreen.main.scale),
+                .transition(.fade(1)),
+                .cacheOriginalImage
+            ])
+        {
+            result in
+        }
+        
+        posterImageView.kf.setImage(with: movie.posterURL)
+        titleLabel.text = movie.title
+        originalTitleLabel.text = "\(movie.originalTitle) (original title)"
+        releaseDateLabel.text = dateFormatter.string(from: movie.releaseDate)
+        synopsisLabel.text = movie.overview
+        
+        userRatingLabel.text = "⭐️ \(movie.voteAverage)/10"
+        voteCountLabel.text = "(based on \(Double(movie.voteCount)) ratings)"
+        popularityLabel.text = "\(movie.popularity)"
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        //configureView()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.isTranslucent = true
-        navigationController?.navigationBar.tintColor = .white
-    }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         configureView()
     }
 
+    @IBAction func likeButtonTapped(_ sender: UIButton) {
+        sender.isSelected = !sender.isSelected
+        sender.backgroundColor = sender.isSelected ? .green : .lightGray
+        sender.pulsate()
+    }
 }
 

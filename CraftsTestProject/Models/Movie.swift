@@ -18,11 +18,14 @@ public struct MoviesResponse: Codable {
 public struct Movie: Codable {
     public let id: Int
     public let title: String
+    public let originalTitle: String
+    public let popularity: Double
     public let backdropPath: String?
     public let posterPath: String?
     public let overview: String
     public let releaseDate: Date
     public let voteAverage: Double
+    public let voteCount: Int
     public var posterURL: URL {
         return URL(string: "https://image.tmdb.org/t/p/w500\(posterPath ?? "")")!
     }

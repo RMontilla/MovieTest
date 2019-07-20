@@ -35,6 +35,7 @@ class APIManager {
     
     private let kAppIDKey = "api_key"
     private let kPageKey = "page"
+    private let kLanguageKey = "language"
     private let apiKey = "212371b21a995c180eedaf8a8ec8e49e"
     private let baseAPIURL = "https://api.themoviedb.org/3/movie/"
     
@@ -50,8 +51,11 @@ class APIManager {
     func fetchMovies ( endpoint : Endpoint, page : Int, completion: @escaping (Result<[Movie], MovieError>) -> Void) {
         
         let url = baseAPIURL + endpoint.rawValue
+        let langStr = Locale.current.identifier
         let params = [ kAppIDKey : apiKey,
-                       kPageKey : "\(page)"]
+                       kPageKey : "\(page)",
+                       kLanguageKey : langStr]
+        print("params \(params)")
         AF.request(url, parameters : params)
                 .validate()
                 .responseJSON(completionHandler: { (response) in
@@ -64,7 +68,6 @@ class APIManager {
                         completion(.failure(.noData))
                         return
                     }
-                        
                     do {
                         let moviesResponse = try self.jsonDecoder.decode(MoviesResponse.self, from: data)
                         completion(.success(moviesResponse.results))

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MovieListViewController: UIViewController {
+class MovieListViewController: BaseViewController {
     
     @IBOutlet var segmentedControl: UISegmentedControl!
     @IBOutlet var movieCollectionView: UICollectionView!
@@ -38,16 +38,6 @@ class MovieListViewController: UIViewController {
         fetchMovieBatch()
     }
     
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.isTranslucent = true
-        navigationController?.navigationBar.tintColor = .white
-    }
-    
     func fetchMovieBatch (){
         self.refreshing = true
         let page = ((movies?.count ?? 0)/20) + 1
@@ -57,11 +47,13 @@ class MovieListViewController: UIViewController {
             
             switch result {
             case .success(let newBatch):
-                
                 if self.movies != nil {
                     self.movies?.append(contentsOf: newBatch)
                 } else {
                     self.movies = newBatch
+                    if newBatch.count > 0 {
+                        self.detailViewController?.movie = newBatch[0]
+                    }
                 }
                 
             case .failure(let error):
