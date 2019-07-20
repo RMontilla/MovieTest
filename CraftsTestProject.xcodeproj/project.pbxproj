@@ -20,6 +20,7 @@
 		EAC5124822E214D500BE7FDF /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAC5124722E214D500BE7FDF /* BaseViewController.swift */; };
 		EAC5124D22E2416000BE7FDF /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAC5124C22E2416000BE7FDF /* Extensions.swift */; };
 		EAC5124F22E2837100BE7FDF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EAC5124E22E2837100BE7FDF /* Assets.xcassets */; };
+		EADD892E22E38FDE0066CC45 /* MasterSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EADD892D22E38FDE0066CC45 /* MasterSplitViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		EAC5124722E214D500BE7FDF /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		EAC5124C22E2416000BE7FDF /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		EAC5124E22E2837100BE7FDF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		EADD892D22E38FDE0066CC45 /* MasterSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterSplitViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +80,7 @@
 				EA7B738222E1020700117D2F /* MovieDetailViewController.swift */,
 				EA55075A22E12CC00051C3AF /* MovieCollectionViewCell.swift */,
 				EAC5124722E214D500BE7FDF /* BaseViewController.swift */,
+				EADD892D22E38FDE0066CC45 /* MasterSplitViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -300,6 +303,7 @@
 				EA7B738322E1020700117D2F /* MovieDetailViewController.swift in Sources */,
 				EA7B738122E1020700117D2F /* MovieListViewController.swift in Sources */,
 				EA55075B22E12CC00051C3AF /* MovieCollectionViewCell.swift in Sources */,
+				EADD892E22E38FDE0066CC45 /* MasterSplitViewController.swift in Sources */,
 				EA7B737F22E1020700117D2F /* AppDelegate.swift in Sources */,
 				EAC5124822E214D500BE7FDF /* BaseViewController.swift in Sources */,
 				EA55075622E120540051C3AF /* Movie.swift in Sources */,
