@@ -12,19 +12,20 @@ import RealmSwift
 
 class MovieDetailViewController: BaseViewController {
     
+    // MARK: - Outlets
     @IBOutlet var backdropImageView: UIImageView!
     @IBOutlet var posterImageView: UIImageView!
-    
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var originalTitleLabel: UILabel!
     @IBOutlet var releaseDateLabel: UILabel!
     @IBOutlet var synopsisLabel: UILabel!
     @IBOutlet var userRatingLabel: UILabel!
     @IBOutlet var voteCountLabel: UILabel!
-    
     @IBOutlet var popularityLabel: UILabel!
     @IBOutlet var likeButton: UIButton!
     
+    
+    //MARK: - Variables
     let dateFormatter: DateFormatter = {
         $0.dateStyle = .medium
         $0.timeStyle = .none
@@ -37,7 +38,19 @@ class MovieDetailViewController: BaseViewController {
         }
     }
 
-    func configureView() {
+    //MARK: - Lifecycle methods
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        configureView()
+    }
+
+    // MARK: - Private methods
+    
+    private func configureView() {
         // Update the user interface for the detail item.
         guard let movie = movie else { return }
         guard let backdropImageView = self.backdropImageView else { return }
@@ -67,41 +80,23 @@ class MovieDetailViewController: BaseViewController {
         voteCountLabel.text = "(based on \(Double(movie.voteCount)) ratings)"
         popularityLabel.text = "\(movie.popularity)"
         
-        
-        //let realm = try! Realm()
-        //let movieArray = realm.objects(Movie.self).filter { $0.id == movie.id}
         likeButton.isSelected = movie.isMovieLiked()
         likeButton.backgroundColor = likeButton.isSelected ? .green : .lightGray
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
+    // MARK: - Actions
     
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        configureView()
-    }
-
     @IBAction func likeButtonTapped(_ sender: UIButton) {
         
         sender.pulsate()
-        
-        let realm = try! Realm()
         guard let movie = movie else { return }
-        let movieArray = realm.objects(Movie.self).filter { $0.id == movie.id}
-        
-        if  movieArray.count > 0{
-            let movieToRemove = movieArray[0]
-            try! realm.write {
-                realm.delete(movieToRemove)
-            }
+
+        //Save or delete movie
+        if movie.isMovieLiked(){
+            movie.delete()
             sender.isSelected = false
         } else {
-            try! realm.write {
-                realm.add(movie)
-            }
+            movie.save()
             sender.isSelected = true
         }
         

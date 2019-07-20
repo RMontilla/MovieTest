@@ -97,7 +97,6 @@
 			isa = PBXGroup;
 			children = (
 				EAC5124E22E2837100BE7FDF /* Assets.xcassets */,
-				EA55073122E106470051C3AF /* Storyboards */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -108,7 +107,8 @@
 				EA7B738422E1020700117D2F /* Main.storyboard */,
 				EA7B738922E1020A00117D2F /* LaunchScreen.storyboard */,
 			);
-			path = Storyboards;
+			name = Storyboards;
+			path = Resources/Storyboards;
 			sourceTree = "<group>";
 		};
 		EA55075222E113590051C3AF /* Models */ = {
@@ -148,6 +148,7 @@
 		EA7B737D22E1020700117D2F /* CraftsTestProject */ = {
 			isa = PBXGroup;
 			children = (
+				EA55073122E106470051C3AF /* Storyboards */,
 				EAC5124922E2413E00BE7FDF /* Utils */,
 				EA55075722E129230051C3AF /* Views */,
 				EA55075222E113590051C3AF /* Models */,

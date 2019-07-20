@@ -11,26 +11,25 @@ import MBProgressHUD
 
 class MovieListViewController: BaseViewController {
     
+    //MARK: - Outlets
     @IBOutlet var segmentedControl: UISegmentedControl!
     @IBOutlet var movieCollectionView: UICollectionView!
     @IBOutlet var paginationLoadingDisplayView: UIView!
     
+    //MARK: - Variables
     private let kCellIdentifier = "MovieCollectionViewCell"
-    
     var detailViewController: MovieDetailViewController? = nil
     var movies : [Movie]? {
         didSet {
-            guard let movieCount = self.movies?.count else { return }
             DispatchQueue.main.async {
                 self.movieCollectionView.reloadData()
             }
-            
         }
     }
-    
     var refreshing = false
 
 
+    //MARK: - Lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -44,7 +43,8 @@ class MovieListViewController: BaseViewController {
         fetchMovieBatch()
     }
     
-    func fetchMovieBatch (){
+    //MARK: - Private methods
+    private func fetchMovieBatch (){
         self.refreshing = true
         let page = ((movies?.count ?? 0)/20) + 1
         guard let endpoint = Endpoint(index: segmentedControl.selectedSegmentIndex) else { return }
@@ -72,11 +72,6 @@ class MovieListViewController: BaseViewController {
         }
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        //clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
-        super.viewWillAppear(animated)
-    }
-
     // MARK: - Segues
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
@@ -89,7 +84,7 @@ class MovieListViewController: BaseViewController {
         }
     }
     
-    //MARK : - UISegmentedControl methods
+    // MARK: - UISegmentedControl methods
     @IBAction func segmentedControlValueChanged(_ sender: UISegmentedControl) {
         movies = [Movie]()
         fetchMovieBatch()

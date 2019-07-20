@@ -55,7 +55,7 @@ class APIManager {
         let params = [ kAppIDKey : apiKey,
                        kPageKey : "\(page)",
                        kLanguageKey : langStr]
-        print("params \(params)")
+        
         AF.request(url, parameters : params)
                 .validate()
                 .responseJSON(completionHandler: { (response) in
