@@ -9,6 +9,9 @@ PODS:
   - RxCocoa (5.0.0):
     - RxRelay (~> 5)
     - RxSwift (~> 5)
+  - RxRealm (1.0.0):
+    - RealmSwift (~> 3.14)
+    - RxSwift (~> 5.0)
   - RxRelay (5.0.0):
     - RxSwift (~> 5)
   - RxSwift (5.0.0)
@@ -20,6 +23,7 @@ DEPENDENCIES:
   - Kingfisher (~> 5.7.0)
   - RealmSwift
   - RxCocoa (~> 5)
+  - RxRealm
   - RxSwift (~> 5)
   - SwiftLint
   - Toast-Swift (~> 5.0.0)
@@ -31,6 +35,7 @@ SPEC REPOS:
     - Realm
     - RealmSwift
     - RxCocoa
+    - RxRealm
     - RxRelay
     - RxSwift
     - SwiftLint
@@ -42,11 +47,12 @@ SPEC CHECKSUMS:
   Realm: c204f1a890f07dea43b14132a6aad118c054b8f2
   RealmSwift: 4d3c9233544b9cd08a8913e0872b9038eb99b054
   RxCocoa: fcf32050ac00d801f34a7f71d5e8e7f23026dcd8
+  RxRealm: 1e81dcfca1fb50c3e9b3e1f8102bc875c5156a2e
   RxRelay: 4f7409406a51a55cd88483f21ed898c234d60f18
   RxSwift: 8b0671caa829a763bbce7271095859121cbd895f
   SwiftLint: 9fc1143bbacec37f94994a7d0d2a85b2154b6294
   Toast-Swift: 36f4720243c8582c2be243a60a51e193c761f541
 
-PODFILE CHECKSUM: 2bc72994ab2007c9fa0bad4232f01250687e4bfa
+PODFILE CHECKSUM: c9b98bff6a49e2f27ce6b666c2020a47c738375a
 
 COCOAPODS: 1.5.3
