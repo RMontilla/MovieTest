@@ -11,12 +11,15 @@ import RxSwift
 import RxRelay
 
 class MovieListViewModel {
+    //MARK: - Variables
     var movies = BehaviorRelay<[Movie]>(value: [Movie]())
     var errMessage = PublishRelay<String>()
     var fetching = BehaviorRelay<Bool>(value: false)
     var firstMovie = PublishRelay<Movie>()
 
-    func fetchMovieBatch(_ endpoint : Endpoint)  {
+    // MARK: - Methods
+    func fetchMovieBatch(_ endpoint: Endpoint) {
+
         let page = (movies.value.count/20) + 1
         self.fetching.accept(true)
         APIManager.shared.fetchMovies(endpoint: endpoint, page: page) { (result) in
@@ -31,7 +34,6 @@ class MovieListViewModel {
                 } else {
                     self.movies.accept(self.movies.value + newBatch)
                 }
-                
             case .failure(let error):
                 var errorMessage = ""
                 switch error {

@@ -29,10 +29,8 @@ public enum Endpoint: String, CaseIterable {
 }
 
 class APIManager {
-
+    // Mark: - Variables
     public static let shared = APIManager()
-    private init() {}
-
     private let jsonDecoder: JSONDecoder = {
         let jsonDecoder = JSONDecoder()
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
@@ -41,30 +39,33 @@ class APIManager {
         jsonDecoder.dateDecodingStrategy = .formatted(dateFormatter)
         return jsonDecoder
     }()
+    
+    // Mark: - Methods
+    private init() {}
 
     func fetchMovies (endpoint: Endpoint, page: Int, completion: @escaping (Result<[Movie], MovieError>) -> Void) {
         let url = Constants.URL.baseAPIURL + endpoint.rawValue
         let langStr = Locale.current.identifier
-        let params = [ Constants.Key.apiIDKey : Constants.Key.Api.apiKey,
+        let params = [ Constants.Key.apiIDKey: Constants.Key.apiKey,
                        Constants.Key.pageKey: "\(page)",
                        Constants.Key.languageKey: langStr]
 
         AF.request(url, parameters: params)
-                .validate()
-                .responseJSON(completionHandler: { (response) in
-                    if response.error != nil {
-                        completion(.failure(.apiError))
-                    }
-                    guard let data = response.data else {
-                        completion(.failure(.noData))
-                        return
-                    }
-                    do {
-                        let moviesResponse = try self.jsonDecoder.decode(MoviesResponse.self, from: data)
-                        completion(.success(moviesResponse.results))
-                    } catch {
-                        completion(.failure(.serializationError))
-                    }
-        })
+          .validate()
+          .responseJSON(completionHandler: { (response) in
+                if response.error != nil {
+                    completion(.failure(.apiError))
+                }
+                guard let data = response.data else {
+                    completion(.failure(.noData))
+                    return
+                }
+                do {
+                    let moviesResponse = try self.jsonDecoder.decode(MoviesResponse.self, from: data)
+                    completion(.success(moviesResponse.results))
+                } catch {
+                    completion(.failure(.serializationError))
+                }
+           })
     }
 }

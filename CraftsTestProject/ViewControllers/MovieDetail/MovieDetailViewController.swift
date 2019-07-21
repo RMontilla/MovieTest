@@ -13,7 +13,7 @@ import RxCocoa
 import RxSwift
 import RxRealm
 
-protocol MovieDetailViewControllerDelegate {
+protocol MovieDetailViewControllerDelegate: class {
     func detailViewController(detailView: MovieDetailViewController, modifiedMovieAtIndex indexPath: IndexPath)
 }
 
@@ -31,10 +31,10 @@ class MovieDetailViewController: UIViewController {
     @IBOutlet var popularityLabel: UILabel!
     @IBOutlet var likeButton: UIButton!
     // MARK: - Variables
-    var delegate: MovieDetailViewControllerDelegate?
+    weak var delegate: MovieDetailViewControllerDelegate?
     var indexPath: IndexPath?
     var movie: Movie? {
-        didSet{
+        didSet {
             guard let movie = movie else { return }
             viewModel.movie.accept(movie)
         }
@@ -49,14 +49,8 @@ class MovieDetailViewController: UIViewController {
         bindActions()
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-    }
-
     // MARK: - Private methods
     private func bindViews() {
-        //guard movie != nil else { return }
-        
         viewModel.title.bind(to: titleLabel.rx.text).disposed(by: disposeBag)
         viewModel.originalTitle.bind(to: originalTitleLabel.rx.text).disposed(by: disposeBag)
         viewModel.releaseDate.bind(to: releaseDateLabel.rx.text).disposed(by: disposeBag)
@@ -64,41 +58,49 @@ class MovieDetailViewController: UIViewController {
         viewModel.userRating.bind(to: userRatingLabel.rx.text).disposed(by: disposeBag)
         viewModel.voteCount.bind(to: voteCountLabel.rx.text).disposed(by: disposeBag)
         viewModel.popularity.bind(to: popularityLabel.rx.text).disposed(by: disposeBag)
-        
-        
-        viewModel.posterURL.subscribe(onNext:{[unowned self] url in
-            self.posterImageView.loadImageWithURL(url: url)
-        }).disposed(by: disposeBag)
-        viewModel.backdropURL.subscribe(onNext:{[unowned self] url in
-            self.backdropImageView.loadImageWithURL(url: url)
-        }).disposed(by: disposeBag)
-        
-        viewModel.movieID.subscribe(onNext:{[unowned self] movieID in
-            self.mainStackView.isHidden = false
-            let realm = try! Realm()
-            let movie = realm.objects(MovieObject.self).filter("id == \(movieID)")
-            Observable.collection(from: movie).map { movies in
-                movies.count > 0
-                }.subscribe(onNext:{[unowned self] liked in
-                    self.likeButton.isSelected = liked
-                    self.likeButton.backgroundColor = liked ? .green : .lightGray
-                }).disposed(by: self.disposeBag)
-        }).disposed(by: disposeBag)
-        
+
+        viewModel.posterURL
+                 .subscribe(onNext: { [unowned self] url in
+                     self.posterImageView.loadImageWithURL(url: url)
+                 })
+                 .disposed(by: disposeBag)
+        viewModel.backdropURL
+                 .subscribe(onNext: { [unowned self] url in
+                     self.backdropImageView.loadImageWithURL(url: url)
+                 })
+                 .disposed(by: disposeBag)
+
+        viewModel.movieID
+                 .subscribe(onNext: { [unowned self] movieID in
+                        self.mainStackView.isHidden = false
+                        let realm = try! Realm()
+                        let movie = realm.objects(MovieObject.self).filter("id == \(movieID)")
+                        Observable.collection(from: movie).map { movies in
+                             movies.count > 0
+                        }.subscribe(onNext: { [unowned self] liked in
+                            self.likeButton.isSelected = liked
+                            self.likeButton.backgroundColor = liked ? Constants.Color.lightGreen : .lightGray
+                        })
+                        .disposed(by: self.disposeBag)
+                 })
+                 .disposed(by: disposeBag)
     }
-    
+
     private func bindActions() {
-        likeButton.rx.tap.subscribe(onNext:{[unowned self] button in
-            self.likeButton.pulsate()
-            guard let movie = self.movie else { return }
-            guard let indexPath = self.indexPath else { return }
-            //Save or delete movie
-            if movie.isMovieLiked() {
-                movie.delete()
-            } else {
-                movie.save()
-            }
-            self.delegate?.detailViewController(detailView: self, modifiedMovieAtIndex: indexPath)
-        }).disposed(by: self.disposeBag)
+        likeButton.rx
+                  .tap
+                  .subscribe(onNext: { [unowned self] _ in
+                     self.likeButton.pulsate()
+                     guard let movie = self.movie else { return }
+                     guard let indexPath = self.indexPath else { return }
+                     //Save or delete movie
+                     if movie.isMovieLiked() {
+                        movie.delete()
+                     } else {
+                        movie.save()
+                     }
+                     self.delegate?.detailViewController(detailView: self, modifiedMovieAtIndex: indexPath)
+                  })
+                  .disposed(by: self.disposeBag)
     }
 }

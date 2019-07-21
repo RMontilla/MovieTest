@@ -40,54 +40,62 @@ class MovieListViewController: UIViewController {
             detailViewController = detail
             detailViewController?.delegate = self
         }
-        
         let realm = try! Realm()
         likedMovies = realm.objects(MovieObject.self)
     }
-    
+
     private func bindModel() {
-        viewModel.errMessage.subscribe(onNext:{[unowned self] message in
-            self.view.makeToast(message)
-        }).disposed(by: disposeBag)
-        
-        viewModel.fetching.subscribe(onNext:{[unowned self] fetching in
-            if fetching {
-                self.view.makeToastActivity(.bottom)
-            } else {
-                self.view.hideAllToasts(includeActivity: true, clearQueue: true)
-            }
-        }).disposed(by: disposeBag)
-        
-        viewModel.firstMovie.subscribe(onNext:{[unowned self] movie in
-            self.detailViewController?.movie = movie
-            self.detailViewController?.indexPath = IndexPath(row: 0, section: 0)
-        }).disposed(by: disposeBag)
-        
-        segmentedControl.rx.selectedSegmentIndex.subscribe (onNext: {[unowned self] index in
-            guard let endpoint = Endpoint(index: index) else { return }
-            self.viewModel.movies.accept([])
-            self.viewModel.fetchMovieBatch(endpoint)
-        }).disposed(by: disposeBag)
-        
+        viewModel.errMessage
+                 .subscribe(onNext: { [unowned self] message in
+                    self.view.makeToast(message)
+                 })
+                 .disposed(by: disposeBag)
+
+        viewModel.fetching
+                 .subscribe(onNext: { [unowned self] fetching in
+                    if fetching {
+                        self.view.makeToastActivity(.bottom)
+                    } else {
+                        self.view.hideAllToasts(includeActivity: true, clearQueue: true)
+                    }
+                 })
+                 .disposed(by: disposeBag)
+
+        viewModel.firstMovie
+                 .subscribe(onNext: { [unowned self] movie in
+                    self.detailViewController?.movie = movie
+                    self.detailViewController?.indexPath = IndexPath(row: 0, section: 0)
+                 })
+                 .disposed(by: disposeBag)
+
+        segmentedControl.rx
+                        .selectedSegmentIndex
+                        .subscribe (onNext: {[unowned self] index in
+                            guard let endpoint = Endpoint(index: index) else { return }
+                            self.viewModel.movies.accept([])
+                            self.viewModel.fetchMovieBatch(endpoint)
+                        })
+                        .disposed(by: disposeBag)
+
         bindCollectionView()
     }
     private func bindCollectionView() {
-        
+
         movieCollectionView.register( UINib(nibName: Constants.Cells.movie, bundle: nil),
                                       forCellWithReuseIdentifier: Constants.Cells.movie)
-        movieCollectionView
-                .rx
-                .setDelegate(self)
-                .disposed(by: disposeBag)
-        
-        viewModel.movies.bind(to: movieCollectionView.rx.items) { collectionView, row, movie in
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Cells.movie,
+        movieCollectionView.rx
+                           .setDelegate(self)
+                           .disposed(by: disposeBag)
+
+        viewModel.movies
+                 .bind(to: movieCollectionView.rx.items) { collectionView, row, movie in
+                     guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Cells.movie,
                                                 for: IndexPath(row: row, section: 0)) as? MovieCollectionViewCell
                                                 else { return UICollectionViewCell()}
-            cell.configCell(withMovie: movie,
-                            isLiked: !self.likedMovies.filter { $0.id == movie.id }.isEmpty)
-            return cell
-        }.disposed(by: disposeBag)
+                     cell.configCell(withMovie: movie, isLiked: !self.likedMovies.filter { $0.id == movie.id }.isEmpty)
+                     return cell
+                 }
+                 .disposed(by: disposeBag)
     }
 
     // MARK: - Segues
@@ -116,7 +124,7 @@ extension MovieListViewController: UICollectionViewDelegate {
             performSegue(withIdentifier: Constants.Segues.toDetail, sender: (movie, indexPath))
         }
     }
-    
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height

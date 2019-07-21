@@ -34,7 +34,6 @@ public struct Movie: Codable {
         return URL(string: Constants.URL.backdropURL + (backdropPath ?? ""))!
     }
 
-
     // MARK: - Realm methods
     @discardableResult public func isMovieLiked() -> Bool {
         do {
@@ -57,14 +56,13 @@ public struct Movie: Codable {
             return false
         }
     }
-    
+
     @discardableResult public func delete() -> Bool {
         do {
             let realm = try Realm()
-            
             let objects = realm.objects(MovieObject.self).filter("id == \(self.id)")
             if objects.count > 0 {
-                try! realm.write {
+                try realm.write {
                     let movieObject = objects[0]
                     realm.delete(movieObject)
                 }

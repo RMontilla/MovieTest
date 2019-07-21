@@ -12,7 +12,6 @@ import RxRelay
 
 class MovieDetailViewModel {
     var movie = PublishRelay<Movie>()
-    
     private let dateFormatter: DateFormatter = {
         $0.dateStyle = .medium
         $0.timeStyle = .none

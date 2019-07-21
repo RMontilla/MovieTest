@@ -12,7 +12,7 @@ import RealmSwift
 public class MovieObject: Object {
     @objc dynamic var id: Int = 0
     @objc dynamic var title: String?
-    
+
     override public class func primaryKey() -> String? {
         return "id"
     }
