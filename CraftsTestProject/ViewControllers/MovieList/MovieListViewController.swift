@@ -9,35 +9,30 @@
 import UIKit
 import RealmSwift
 import Toast_Swift
+import RxSwift
+import RxCocoa
 
 class MovieListViewController: UIViewController {
 
     // MARK: - Outlets
     @IBOutlet var segmentedControl: UISegmentedControl!
     @IBOutlet var movieCollectionView: UICollectionView!
-    @IBOutlet var paginationLoadingDisplayView: UIView!
 
     // MARK: - Variables
-    var detailViewController: MovieDetailViewController?
-    var movies: [Movie] = [Movie]() {
-        didSet {
-            DispatchQueue.main.async {
-                self.movieCollectionView.reloadData()
-            }
-        }
-    }
-    var refreshing = false
-    var likedMovies: Results<MovieObject>!
+    private var detailViewController: MovieDetailViewController?
+    private var likedMovies: Results<MovieObject>!
+    private var viewModel = MovieListViewModel()
+    private var disposeBag = DisposeBag()
 
     // MARK: - Lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
         initConfig()
-        fetchMovieBatch()
+        bindModel()
     }
 
     // MARK: - Private methods
-    private func initConfig () {
+    private func initConfig() {
         if let split = splitViewController {
             let controllers = split.viewControllers
             guard let navigationController = controllers[controllers.count-1] as? UINavigationController else { return }
@@ -45,48 +40,54 @@ class MovieListViewController: UIViewController {
             detailViewController = detail
             detailViewController?.delegate = self
         }
-        movieCollectionView.register( UINib(nibName: Constants.Cells.movie, bundle: nil),
-                                      forCellWithReuseIdentifier: Constants.Cells.movie)
         
         let realm = try! Realm()
         likedMovies = realm.objects(MovieObject.self)
     }
     
-    private func fetchMovieBatch() {
-        self.refreshing = true
-        let page = (movies.count/20) + 1
-        guard let endpoint = Endpoint(index: segmentedControl.selectedSegmentIndex) else { return }
-
-        self.view.makeToastActivity(.bottom)
-        APIManager.shared.fetchMovies(endpoint: endpoint, page: page) { (result) in
-            self.view.hideAllToasts(includeActivity: true, clearQueue: true)
-
-            switch result {
-            case .success(let newBatch):
-                if self.movies.isEmpty {
-                    self.movies = newBatch
-                    if newBatch.count > 0 {
-                        self.detailViewController?.movie = newBatch[0]
-                        self.detailViewController?.indexPath = IndexPath(row: 0, section: 0)
-                    }
-                } else {
-                    self.movies.append(contentsOf: newBatch)
-                }
-                
-            case .failure(let error):
-                var errorMessage = ""
-                switch error {
-                case .apiError:
-                    errorMessage = Constants.ErrMessage.apiError
-                case .noData:
-                    errorMessage = Constants.ErrMessage.noData
-                case .serializationError:
-                    errorMessage = Constants.ErrMessage.serializationError
-                }
-                self.view.makeToast(errorMessage)
+    private func bindModel() {
+        viewModel.errMessage.subscribe(onNext:{[unowned self] message in
+            self.view.makeToast(message)
+        }).disposed(by: disposeBag)
+        
+        viewModel.fetching.subscribe(onNext:{[unowned self] fetching in
+            if fetching {
+                self.view.makeToastActivity(.bottom)
+            } else {
+                self.view.hideAllToasts(includeActivity: true, clearQueue: true)
             }
-            self.refreshing = false
-        }
+        }).disposed(by: disposeBag)
+        
+        viewModel.firstMovie.subscribe(onNext:{[unowned self] movie in
+            self.detailViewController?.movie = movie
+            self.detailViewController?.indexPath = IndexPath(row: 0, section: 0)
+        }).disposed(by: disposeBag)
+        
+        segmentedControl.rx.selectedSegmentIndex.subscribe (onNext: {[unowned self] index in
+            guard let endpoint = Endpoint(index: index) else { return }
+            self.viewModel.movies.accept([])
+            self.viewModel.fetchMovieBatch(endpoint)
+        }).disposed(by: disposeBag)
+        
+        bindCollectionView()
+    }
+    private func bindCollectionView() {
+        
+        movieCollectionView.register( UINib(nibName: Constants.Cells.movie, bundle: nil),
+                                      forCellWithReuseIdentifier: Constants.Cells.movie)
+        movieCollectionView
+                .rx
+                .setDelegate(self)
+                .disposed(by: disposeBag)
+        
+        viewModel.movies.bind(to: movieCollectionView.rx.items) { collectionView, row, movie in
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Cells.movie,
+                                                for: IndexPath(row: row, section: 0)) as? MovieCollectionViewCell
+                                                else { return UICollectionViewCell()}
+            cell.configCell(withMovie: movie,
+                            isLiked: !self.likedMovies.filter { $0.id == movie.id }.isEmpty)
+            return cell
+        }.disposed(by: disposeBag)
     }
 
     // MARK: - Segues
@@ -103,34 +104,11 @@ class MovieListViewController: UIViewController {
         default: return
         }
     }
-
-    // MARK: - UISegmentedControl methods
-    @IBAction func segmentedControlValueChanged(_ sender: UISegmentedControl) {
-        movies = [Movie]()
-        fetchMovieBatch()
-    }
-}
-
-extension MovieListViewController: UICollectionViewDataSource {
-
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return movies.count
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let movie = movies[indexPath.row]
-        
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Cells.movie,
-                         for: indexPath) as? MovieCollectionViewCell else { return UICollectionViewCell()}
-        cell.configCell(withMovie: movie, isLiked: !likedMovies.filter { $0.id == movie.id }.isEmpty)
-        return cell
-    }
 }
 
 extension MovieListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let movie = movies[indexPath.row]
+        let movie = viewModel.movies.value[indexPath.row]
         if UI_USER_INTERFACE_IDIOM() == .pad {
             detailViewController?.movie = movie
             detailViewController?.indexPath = indexPath
@@ -138,15 +116,15 @@ extension MovieListViewController: UICollectionViewDelegate {
             performSegue(withIdentifier: Constants.Segues.toDetail, sender: (movie, indexPath))
         }
     }
-
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
-        if offsetY > contentHeight - scrollView.frame.height - 40 && !refreshing {
-            fetchMovieBatch()
+        if offsetY > contentHeight - scrollView.frame.height - 40 && !viewModel.fetching.value {
+            guard let endpoint = Endpoint(index: segmentedControl.selectedSegmentIndex) else { return }
+            self.viewModel.fetchMovieBatch(endpoint)
         }
     }
-
 }
 
 extension MovieListViewController: UICollectionViewDelegateFlowLayout {

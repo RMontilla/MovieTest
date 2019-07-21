@@ -9,6 +9,9 @@
 import UIKit
 import Kingfisher
 import RealmSwift
+import RxCocoa
+import RxSwift
+import RxRealm
 
 protocol MovieDetailViewControllerDelegate {
     func detailViewController(detailView: MovieDetailViewController, modifiedMovieAtIndex indexPath: IndexPath)
@@ -31,64 +34,71 @@ class MovieDetailViewController: UIViewController {
     var delegate: MovieDetailViewControllerDelegate?
     var indexPath: IndexPath?
     var movie: Movie? {
-        didSet {
-            configureView()
+        didSet{
+            guard let movie = movie else { return }
+            viewModel.movie.accept(movie)
         }
     }
-    
-    private let dateFormatter: DateFormatter = {
-        $0.dateStyle = .medium
-        $0.timeStyle = .none
-        return $0
-    }(DateFormatter())
+    private var viewModel = MovieDetailViewModel()
+    private var disposeBag = DisposeBag()
 
     // MARK: - Lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        bindViews()
+        bindActions()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        configureView()
     }
 
     // MARK: - Private methods
-    private func configureView() {
-        // Update the user interface for the detail item.
-        guard let movie = movie else { return }
-        guard let backdropImageView = self.backdropImageView else { return }
-        mainStackView.isHidden = false
-
-        backdropImageView.loadImageWithURL(url: movie.backdropURL)
-
-        posterImageView.kf.setImage(with: movie.posterURL)
-        titleLabel.text = movie.title ?? ""
-        originalTitleLabel.text = movie.originalTitle != nil ? "\(movie.originalTitle!) (original title)" : ""
-        releaseDateLabel.text = movie.releaseDate != nil ? dateFormatter.string(from: movie.releaseDate!) : ""
-        synopsisLabel.text = movie.overview
-        userRatingLabel.text = "⭐️ \(movie.voteAverage)/10"
-        voteCountLabel.text = "(based on \(movie.voteCount) ratings)"
-        popularityLabel.text = "\(movie.popularity)"
-
-        likeButton.isSelected = movie.isMovieLiked()
-        likeButton.backgroundColor = likeButton.isSelected ? .green : .lightGray
+    private func bindViews() {
+        //guard movie != nil else { return }
+        
+        viewModel.title.bind(to: titleLabel.rx.text).disposed(by: disposeBag)
+        viewModel.originalTitle.bind(to: originalTitleLabel.rx.text).disposed(by: disposeBag)
+        viewModel.releaseDate.bind(to: releaseDateLabel.rx.text).disposed(by: disposeBag)
+        viewModel.synopsis.bind(to: synopsisLabel.rx.text).disposed(by: disposeBag)
+        viewModel.userRating.bind(to: userRatingLabel.rx.text).disposed(by: disposeBag)
+        viewModel.voteCount.bind(to: voteCountLabel.rx.text).disposed(by: disposeBag)
+        viewModel.popularity.bind(to: popularityLabel.rx.text).disposed(by: disposeBag)
+        
+        
+        viewModel.posterURL.subscribe(onNext:{[unowned self] url in
+            self.posterImageView.loadImageWithURL(url: url)
+        }).disposed(by: disposeBag)
+        viewModel.backdropURL.subscribe(onNext:{[unowned self] url in
+            self.backdropImageView.loadImageWithURL(url: url)
+        }).disposed(by: disposeBag)
+        
+        viewModel.movieID.subscribe(onNext:{[unowned self] movieID in
+            self.mainStackView.isHidden = false
+            let realm = try! Realm()
+            let movie = realm.objects(MovieObject.self).filter("id == \(movieID)")
+            Observable.collection(from: movie).map { movies in
+                movies.count > 0
+                }.subscribe(onNext:{[unowned self] liked in
+                    self.likeButton.isSelected = liked
+                    self.likeButton.backgroundColor = liked ? .green : .lightGray
+                }).disposed(by: self.disposeBag)
+        }).disposed(by: disposeBag)
+        
     }
-
-    // MARK: - Actions
-    @IBAction func likeButtonTapped(_ sender: UIButton) {
-        sender.pulsate()
-        guard let movie = movie else { return }
-        guard let indexPath = indexPath else { return }
-
-        //Save or delete movie
-        if movie.isMovieLiked() {
-            movie.delete()
-            sender.isSelected = false
-        } else {
-            movie.save()
-            sender.isSelected = true
-        }
-        sender.backgroundColor = sender.isSelected ? .green : .lightGray
-        delegate?.detailViewController(detailView: self, modifiedMovieAtIndex: indexPath)
+    
+    private func bindActions() {
+        likeButton.rx.tap.subscribe(onNext:{[unowned self] button in
+            self.likeButton.pulsate()
+            guard let movie = self.movie else { return }
+            guard let indexPath = self.indexPath else { return }
+            //Save or delete movie
+            if movie.isMovieLiked() {
+                movie.delete()
+            } else {
+                movie.save()
+            }
+            self.delegate?.detailViewController(detailView: self, modifiedMovieAtIndex: indexPath)
+        }).disposed(by: self.disposeBag)
     }
 }

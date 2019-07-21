@@ -17,6 +17,8 @@
 		EA7B738322E1020700117D2F /* MovieDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA7B738222E1020700117D2F /* MovieDetailViewController.swift */; };
 		EA7B738622E1020700117D2F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA7B738422E1020700117D2F /* Main.storyboard */; };
 		EA7B738B22E1020A00117D2F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA7B738922E1020A00117D2F /* LaunchScreen.storyboard */; };
+		EAAFE5C522E4984400B86B07 /* MovieDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAAFE5C422E4984400B86B07 /* MovieDetailViewModel.swift */; };
+		EAAFE5C722E4B19800B86B07 /* MovieListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAAFE5C622E4B19800B86B07 /* MovieListViewModel.swift */; };
 		EAB2A62522E3D485007B83F8 /* MovieObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAB2A62422E3D485007B83F8 /* MovieObject.swift */; };
 		EAB2A62722E3E802007B83F8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAB2A62622E3E802007B83F8 /* Constants.swift */; };
 		EAC5124D22E2416000BE7FDF /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAC5124C22E2416000BE7FDF /* Extensions.swift */; };
@@ -39,6 +41,8 @@
 		EA7B738522E1020700117D2F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		EA7B738A22E1020A00117D2F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EA7B738C22E1020A00117D2F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EAAFE5C422E4984400B86B07 /* MovieDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailViewModel.swift; sourceTree = "<group>"; };
+		EAAFE5C622E4B19800B86B07 /* MovieListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieListViewModel.swift; sourceTree = "<group>"; };
 		EAB2A62422E3D485007B83F8 /* MovieObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieObject.swift; sourceTree = "<group>"; };
 		EAB2A62622E3E802007B83F8 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		EAC5124C22E2416000BE7FDF /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -148,17 +152,27 @@
 		EA7B737D22E1020700117D2F /* CraftsTestProject */ = {
 			isa = PBXGroup;
 			children = (
-				EA55073122E106470051C3AF /* Storyboards */,
 				EAC5124922E2413E00BE7FDF /* Utils */,
-				EA55075722E129230051C3AF /* Views */,
-				EA55075222E113590051C3AF /* Models */,
 				EA55073022E1063A0051C3AF /* Resources */,
+				EA55075222E113590051C3AF /* Models */,
 				EA55072F22E105EF0051C3AF /* Networking */,
+				EA55073122E106470051C3AF /* Storyboards */,
+				EA55075722E129230051C3AF /* Views */,
+				EAAFE5C322E4980600B86B07 /* ViewModels */,
 				EA55072E22E105E30051C3AF /* ViewControllers */,
 				EA7B737E22E1020700117D2F /* AppDelegate.swift */,
 				EA7B738C22E1020A00117D2F /* Info.plist */,
 			);
 			path = CraftsTestProject;
+			sourceTree = "<group>";
+		};
+		EAAFE5C322E4980600B86B07 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				EAAFE5C622E4B19800B86B07 /* MovieListViewModel.swift */,
+				EAAFE5C422E4984400B86B07 /* MovieDetailViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		EAB2A62022E3A96D007B83F8 /* MovieList */ = {
@@ -282,6 +296,7 @@
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
+				"${BUILT_PRODUCTS_DIR}/RxRealm/RxRealm.framework",
 				"${BUILT_PRODUCTS_DIR}/RxRelay/RxRelay.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/Toast-Swift/Toast_Swift.framework",
@@ -295,6 +310,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxRealm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxRelay.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Toast_Swift.framework",
@@ -341,7 +357,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -356,10 +372,12 @@
 				EAC5124D22E2416000BE7FDF /* Extensions.swift in Sources */,
 				EA7B738322E1020700117D2F /* MovieDetailViewController.swift in Sources */,
 				EA7B738122E1020700117D2F /* MovieListViewController.swift in Sources */,
+				EAAFE5C522E4984400B86B07 /* MovieDetailViewModel.swift in Sources */,
 				EA55075B22E12CC00051C3AF /* MovieCollectionViewCell.swift in Sources */,
 				EADD892E22E38FDE0066CC45 /* MasterSplitViewController.swift in Sources */,
 				EA7B737F22E1020700117D2F /* AppDelegate.swift in Sources */,
 				EA55075622E120540051C3AF /* Movie.swift in Sources */,
+				EAAFE5C722E4B19800B86B07 /* MovieListViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
