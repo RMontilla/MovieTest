@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 import Toast_Swift
 
-class MovieListViewController: BaseViewController {
+class MovieListViewController: UIViewController {
 
     // MARK: - Outlets
     @IBOutlet var segmentedControl: UISegmentedControl!

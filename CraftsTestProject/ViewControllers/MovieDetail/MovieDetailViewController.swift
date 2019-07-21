@@ -14,7 +14,7 @@ protocol MovieDetailViewControllerDelegate {
     func detailViewController(detailView: MovieDetailViewController, modifiedMovieAtIndex indexPath: IndexPath)
 }
 
-class MovieDetailViewController: BaseViewController {
+class MovieDetailViewController: UIViewController {
     // MARK: - Outlets
     @IBOutlet var backdropImageView: UIImageView!
     @IBOutlet var posterImageView: UIImageView!
