@@ -11,5 +11,6 @@ target 'CraftsTestProject' do
   pod 'MBProgressHUD', '~> 1.1.0'
   pod 'RealmSwift'
   pod 'SwiftLint'
+  pod 'Toast-Swift', '~> 5.0.0'
 
 end

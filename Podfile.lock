@@ -8,6 +8,7 @@ PODS:
   - RealmSwift (3.17.1):
     - Realm (= 3.17.1)
   - SwiftLint (0.33.1)
+  - Toast-Swift (5.0.0)
 
 DEPENDENCIES:
   - Alamofire (~> 5.0.0-beta.5)
@@ -15,6 +16,7 @@ DEPENDENCIES:
   - MBProgressHUD (~> 1.1.0)
   - RealmSwift
   - SwiftLint
+  - Toast-Swift (~> 5.0.0)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -24,6 +26,7 @@ SPEC REPOS:
     - Realm
     - RealmSwift
     - SwiftLint
+    - Toast-Swift
 
 SPEC CHECKSUMS:
   Alamofire: cd08a4402bd12cacd0c66f23fb12fec8d6b965e4
@@ -32,7 +35,8 @@ SPEC CHECKSUMS:
   Realm: c204f1a890f07dea43b14132a6aad118c054b8f2
   RealmSwift: 4d3c9233544b9cd08a8913e0872b9038eb99b054
   SwiftLint: 9fc1143bbacec37f94994a7d0d2a85b2154b6294
+  Toast-Swift: 36f4720243c8582c2be243a60a51e193c761f541
 
-PODFILE CHECKSUM: 2d638e2c99cda583eb8ebc456ae5dc9f2125e5ac
+PODFILE CHECKSUM: 90899cd4ed6d742e408527d84ad97f8fce6714a2
 
 COCOAPODS: 1.5.3
