@@ -8,6 +8,7 @@
 
 import UIKit
 import MBProgressHUD
+import RealmSwift
 
 class MovieListViewController: BaseViewController {
 
@@ -17,9 +18,8 @@ class MovieListViewController: BaseViewController {
     @IBOutlet var paginationLoadingDisplayView: UIView!
 
     // MARK: - Variables
-    private let kCellIdentifier = "MovieCollectionViewCell"
     var detailViewController: MovieDetailViewController?
-    var movies: [Movie]? {
+    var movies: [Movie] = [Movie]() {
         didSet {
             DispatchQueue.main.async {
                 self.movieCollectionView.reloadData()
@@ -27,26 +27,34 @@ class MovieListViewController: BaseViewController {
         }
     }
     var refreshing = false
+    var likedMovies: Results<MovieObject>!
 
     // MARK: - Lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        initConfig()
+        fetchMovieBatch()
+    }
 
+    // MARK: - Private methods
+    private func initConfig () {
         if let split = splitViewController {
             let controllers = split.viewControllers
             guard let navigationController = controllers[controllers.count-1] as? UINavigationController else { return }
             guard let detail = navigationController.topViewController as? MovieDetailViewController else { return }
             detailViewController = detail
+            detailViewController?.delegate = self
         }
-        movieCollectionView.register( UINib(nibName: kCellIdentifier, bundle: nil),
-                                      forCellWithReuseIdentifier: kCellIdentifier)
-        fetchMovieBatch()
+        movieCollectionView.register( UINib(nibName: Constants.Cells.movie, bundle: nil),
+                                      forCellWithReuseIdentifier: Constants.Cells.movie)
+        
+        let realm = try! Realm()
+        likedMovies = realm.objects(MovieObject.self)
     }
-
-    // MARK: - Private methods
+    
     private func fetchMovieBatch() {
         self.refreshing = true
-        let page = ((movies?.count ?? 0)/20) + 1
+        let page = (movies.count/20) + 1
         guard let endpoint = Endpoint(index: segmentedControl.selectedSegmentIndex) else { return }
 
         MBProgressHUD.showAdded(to: self.paginationLoadingDisplayView, animated: true)
@@ -55,13 +63,14 @@ class MovieListViewController: BaseViewController {
 
             switch result {
             case .success(let newBatch):
-                if self.movies != nil {
-                    self.movies?.append(contentsOf: newBatch)
-                } else {
+                if self.movies.isEmpty {
                     self.movies = newBatch
                     if newBatch.count > 0 {
                         self.detailViewController?.movie = newBatch[0]
+                        self.detailViewController?.indexPath = IndexPath(row: 0, section: 0)
                     }
+                } else {
+                    self.movies.append(contentsOf: newBatch)
                 }
             case .failure(let error):
                 print("error \(error)")
@@ -73,12 +82,14 @@ class MovieListViewController: BaseViewController {
     // MARK: - Segues
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
-        case "showDetail":
-            guard let movie = sender as? Movie else { return }
+        case Constants.Segues.toDetail:
+            guard let (movie, indexPath) = sender as? (Movie, IndexPath) else { return }
             guard let navigationController = segue.destination as? UINavigationController else { return }
             guard let detailViewController = navigationController.topViewController
                                              as? MovieDetailViewController else { return }
             detailViewController.movie = movie
+            detailViewController.indexPath = indexPath
+            detailViewController.delegate = self
         default: return
         }
     }
@@ -93,26 +104,28 @@ class MovieListViewController: BaseViewController {
 extension MovieListViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return movies?.count ?? 0
+        return movies.count
     }
 
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let movie = movies![indexPath.row]
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: kCellIdentifier,
+        let movie = movies[indexPath.row]
+        
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Cells.movie,
                          for: indexPath) as? MovieCollectionViewCell else { return UICollectionViewCell()}
-        cell.configCell(withMovie: movie)
+        cell.configCell(withMovie: movie, isLiked: !likedMovies.filter { $0.id == movie.id }.isEmpty)
         return cell
     }
 }
 
 extension MovieListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let movie = movies?[indexPath.row] else { return }
+        let movie = movies[indexPath.row]
         if UI_USER_INTERFACE_IDIOM() == .pad {
             detailViewController?.movie = movie
+            detailViewController?.indexPath = indexPath
         } else {
-            performSegue(withIdentifier: "showDetail", sender: movie)
+            performSegue(withIdentifier: Constants.Segues.toDetail, sender: (movie, indexPath))
         }
     }
 
@@ -133,5 +146,11 @@ extension MovieListViewController: UICollectionViewDelegateFlowLayout {
         let width = collectionView.frame.width/3
         let height = width * 1.5
         return CGSize(width: width, height: height)
+    }
+}
+
+extension MovieListViewController: MovieDetailViewControllerDelegate {
+    func detailViewController(detailView: MovieDetailViewController, modifiedMovieAtIndex indexPath: IndexPath) {
+        movieCollectionView.reloadItems(at: [indexPath])
     }
 }

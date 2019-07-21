@@ -15,9 +15,9 @@ class MovieCollectionViewCell: UICollectionViewCell {
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var likeView: UIView!
 
-    func configCell(withMovie movie: Movie) {
+    func configCell(withMovie movie: Movie, isLiked: Bool) {
         titleLabel.text = movie.title
-        likeView.isHidden = !movie.isMovieLiked()
+        likeView.isHidden = !isLiked
 
         let url = movie.posterURL
         let processor = DownsamplingImageProcessor(size: posterImageView.frame.size)

@@ -32,11 +32,6 @@ class APIManager {
 
     public static let shared = APIManager()
     private init() {}
-    private let kAppIDKey = "api_key"
-    private let kPageKey = "page"
-    private let kLanguageKey = "language"
-    private let apiKey = "212371b21a995c180eedaf8a8ec8e49e"
-    private let baseAPIURL = "https://api.themoviedb.org/3/movie/"
 
     private let jsonDecoder: JSONDecoder = {
         let jsonDecoder = JSONDecoder()
@@ -48,11 +43,11 @@ class APIManager {
     }()
 
     func fetchMovies (endpoint: Endpoint, page: Int, completion: @escaping (Result<[Movie], MovieError>) -> Void) {
-        let url = baseAPIURL + endpoint.rawValue
+        let url = Constants.URL.baseAPIURL + endpoint.rawValue
         let langStr = Locale.current.identifier
-        let params = [ kAppIDKey: apiKey,
-                       kPageKey: "\(page)",
-                       kLanguageKey: langStr]
+        let params = [ Constants.Key.apiIDKey : Constants.Key.Api.apiKey,
+                       Constants.Key.pageKey: "\(page)",
+                       Constants.Key.languageKey: langStr]
 
         AF.request(url, parameters: params)
                 .validate()

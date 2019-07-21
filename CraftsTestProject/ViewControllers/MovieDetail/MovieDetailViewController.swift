@@ -10,6 +10,10 @@ import UIKit
 import Kingfisher
 import RealmSwift
 
+protocol MovieDetailViewControllerDelegate {
+    func detailViewController(detailView: MovieDetailViewController, modifiedMovieAtIndex indexPath: IndexPath)
+}
+
 class MovieDetailViewController: BaseViewController {
     // MARK: - Outlets
     @IBOutlet var backdropImageView: UIImageView!
@@ -23,17 +27,19 @@ class MovieDetailViewController: BaseViewController {
     @IBOutlet var popularityLabel: UILabel!
     @IBOutlet var likeButton: UIButton!
     // MARK: - Variables
-    let dateFormatter: DateFormatter = {
-        $0.dateStyle = .medium
-        $0.timeStyle = .none
-        return $0
-    }(DateFormatter())
-
+    var delegate: MovieDetailViewControllerDelegate?
+    var indexPath: IndexPath?
     var movie: Movie? {
         didSet {
             configureView()
         }
     }
+    
+    private let dateFormatter: DateFormatter = {
+        $0.dateStyle = .medium
+        $0.timeStyle = .none
+        return $0
+    }(DateFormatter())
 
     // MARK: - Lifecycle methods
     override func viewDidLoad() {
@@ -70,7 +76,7 @@ class MovieDetailViewController: BaseViewController {
         releaseDateLabel.text = movie.releaseDate != nil ? dateFormatter.string(from: movie.releaseDate!) : ""
         synopsisLabel.text = movie.overview
         userRatingLabel.text = "⭐️ \(movie.voteAverage)/10"
-        voteCountLabel.text = "(based on \(Double(movie.voteCount)) ratings)"
+        voteCountLabel.text = "(based on \(movie.voteCount) ratings)"
         popularityLabel.text = "\(movie.popularity)"
 
         likeButton.isSelected = movie.isMovieLiked()
@@ -81,6 +87,7 @@ class MovieDetailViewController: BaseViewController {
     @IBAction func likeButtonTapped(_ sender: UIButton) {
         sender.pulsate()
         guard let movie = movie else { return }
+        guard let indexPath = indexPath else { return }
 
         //Save or delete movie
         if movie.isMovieLiked() {
@@ -91,5 +98,6 @@ class MovieDetailViewController: BaseViewController {
             sender.isSelected = true
         }
         sender.backgroundColor = sender.isSelected ? .green : .lightGray
+        delegate?.detailViewController(detailView: self, modifiedMovieAtIndex: indexPath)
     }
 }
