@@ -47,6 +47,10 @@ class MovieDetailViewController: UIViewController {
         super.viewDidLoad()
         bindViews()
         bindActions()
+        if UI_USER_INTERFACE_IDIOM() == .phone {
+            guard let movie = movie else { return }
+            viewModel.movie.accept(movie)
+        }
     }
 
     // MARK: - Private methods
