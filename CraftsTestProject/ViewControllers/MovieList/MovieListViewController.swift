@@ -7,8 +7,8 @@
 //
 
 import UIKit
-import MBProgressHUD
 import RealmSwift
+import Toast_Swift
 
 class MovieListViewController: BaseViewController {
 
@@ -57,9 +57,9 @@ class MovieListViewController: BaseViewController {
         let page = (movies.count/20) + 1
         guard let endpoint = Endpoint(index: segmentedControl.selectedSegmentIndex) else { return }
 
-        MBProgressHUD.showAdded(to: self.paginationLoadingDisplayView, animated: true)
+        self.view.makeToastActivity(.bottom)
         APIManager.shared.fetchMovies(endpoint: endpoint, page: page) { (result) in
-            MBProgressHUD.hide(for: self.paginationLoadingDisplayView, animated: true)
+            self.view.hideAllToasts(includeActivity: true, clearQueue: true)
 
             switch result {
             case .success(let newBatch):
@@ -72,8 +72,18 @@ class MovieListViewController: BaseViewController {
                 } else {
                     self.movies.append(contentsOf: newBatch)
                 }
+                
             case .failure(let error):
-                print("error \(error)")
+                var errorMessage = ""
+                switch error {
+                case .apiError:
+                    errorMessage = Constants.ErrMessage.apiError
+                case .noData:
+                    errorMessage = Constants.ErrMessage.noData
+                case .serializationError:
+                    errorMessage = Constants.ErrMessage.serializationError
+                }
+                self.view.makeToast(errorMessage)
             }
             self.refreshing = false
         }

@@ -27,9 +27,15 @@ struct Constants {
         static let languageKey = "language"
     }
     
-    struct URL{
+    struct URL {
         static let baseAPIURL = "https://api.themoviedb.org/3/movie/"
         static let posterURL = "https://image.tmdb.org/t/p/w500"
         static let backdropURL = "https://image.tmdb.org/t/p/original"
+    }
+    
+    struct ErrMessage {
+        static let apiError = "Couldn't connecto to API"
+        static let noData = "No data received from request"
+        static let serializationError = "Error parsing data"
     }
 }
