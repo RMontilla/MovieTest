@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import RealmSwift
 import Toast_Swift
 import RxSwift
 import RxCocoa
@@ -20,7 +19,6 @@ class MovieListViewController: UIViewController {
 
     // MARK: - Variables
     private var detailViewController: MovieDetailViewController?
-    private var likedMovies: Results<MovieObject>!
     private var viewModel = MovieListViewModel()
     private var disposeBag = DisposeBag()
 
@@ -40,8 +38,6 @@ class MovieListViewController: UIViewController {
             detailViewController = detail
             detailViewController?.delegate = self
         }
-        let realm = try! Realm()
-        likedMovies = realm.objects(MovieObject.self)
     }
 
     private func bindModel() {
@@ -92,7 +88,8 @@ class MovieListViewController: UIViewController {
                      guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Cells.movie,
                                                 for: IndexPath(row: row, section: 0)) as? MovieCollectionViewCell
                                                 else { return UICollectionViewCell()}
-                     cell.configCell(withMovie: movie, isLiked: !self.likedMovies.filter { $0.id == movie.id }.isEmpty)
+                     cell.configCell(withMovie: movie,
+                                     isLiked: !self.viewModel.likedMovies.filter { $0.id == movie.id }.isEmpty)
                      return cell
                  }
                  .disposed(by: disposeBag)

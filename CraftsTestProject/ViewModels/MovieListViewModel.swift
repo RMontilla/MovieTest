@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RealmSwift
 import RxSwift
 import RxRelay
 
@@ -16,8 +17,14 @@ class MovieListViewModel {
     var errMessage = PublishRelay<String>()
     var fetching = BehaviorRelay<Bool>(value: false)
     var firstMovie = PublishRelay<Movie>()
+    var likedMovies: Results<MovieObject>!
 
     // MARK: - Methods
+    init() {
+        let realm = try! Realm()
+        likedMovies = realm.objects(MovieObject.self)
+    }
+    
     func fetchMovieBatch(_ endpoint: Endpoint) {
 
         let page = (movies.value.count/20) + 1
