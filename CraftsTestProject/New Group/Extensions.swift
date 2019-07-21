@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Kingfisher
 
 @IBDesignable class GradientView: UIView {
     @IBInspectable var topColor: UIColor = UIColor.white
@@ -20,6 +21,27 @@ import UIKit
     override func layoutSubviews() {
         guard let layer = layer as? CAGradientLayer else { return }
         layer.colors = [topColor.cgColor, bottomColor.cgColor]
+    }
+}
+
+extension UIImageView {
+    
+    func loadImageWithURL (url: URL) {
+        let processor = DownsamplingImageProcessor(size: self.frame.size)
+        self.kf.indicatorType = .activity
+        if let activityView = self.kf.indicator?.view as? UIActivityIndicatorView {
+            activityView.color = .white
+        }
+        self.kf.setImage(
+            with: url,
+            placeholder: nil,
+            options: [
+                .processor(processor),
+                .scaleFactor(UIScreen.main.scale),
+                .transition(.fade(1)),
+                .cacheOriginalImage
+        ]) { _ in
+        }
     }
 }
 

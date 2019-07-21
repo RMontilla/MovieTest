@@ -16,6 +16,7 @@ protocol MovieDetailViewControllerDelegate {
 
 class MovieDetailViewController: UIViewController {
     // MARK: - Outlets
+    @IBOutlet var mainStackView: UIStackView!
     @IBOutlet var backdropImageView: UIImageView!
     @IBOutlet var posterImageView: UIImageView!
     @IBOutlet var titleLabel: UILabel!
@@ -56,19 +57,9 @@ class MovieDetailViewController: UIViewController {
         // Update the user interface for the detail item.
         guard let movie = movie else { return }
         guard let backdropImageView = self.backdropImageView else { return }
+        mainStackView.isHidden = false
 
-        let processor = DownsamplingImageProcessor(size: posterImageView.frame.size)
-        backdropImageView.kf.indicatorType = .activity
-        backdropImageView.kf.setImage(
-            with: movie.backdropURL,
-            placeholder: nil,
-            options: [
-                .processor(processor),
-                .scaleFactor(UIScreen.main.scale),
-                .transition(.fade(1)),
-                .cacheOriginalImage
-            ]) { _ in
-        }
+        backdropImageView.loadImageWithURL(url: movie.backdropURL)
 
         posterImageView.kf.setImage(with: movie.posterURL)
         titleLabel.text = movie.title ?? ""

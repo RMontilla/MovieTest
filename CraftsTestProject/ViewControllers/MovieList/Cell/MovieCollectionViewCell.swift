@@ -18,19 +18,6 @@ class MovieCollectionViewCell: UICollectionViewCell {
     func configCell(withMovie movie: Movie, isLiked: Bool) {
         titleLabel.text = movie.title
         likeView.isHidden = !isLiked
-
-        let url = movie.posterURL
-        let processor = DownsamplingImageProcessor(size: posterImageView.frame.size)
-        posterImageView.kf.indicatorType = .activity
-        posterImageView.kf.setImage(
-            with: url,
-            placeholder: nil,
-            options: [
-                .processor(processor),
-                .scaleFactor(UIScreen.main.scale),
-                .transition(.fade(1)),
-                .cacheOriginalImage
-            ]) { _ in
-        }
+        posterImageView.loadImageWithURL(url: movie.posterURL)
     }
 }

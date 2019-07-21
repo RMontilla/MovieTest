@@ -110,7 +110,7 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" bounces="NO" translatesAutoresizingMaskIntoConstraints="NO" id="23a-8a-Trc">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="GQi-Kw-cfx">
+                                    <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="GQi-Kw-cfx">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="846"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9jE-eu-oSM">
@@ -339,6 +339,7 @@
                     <connections>
                         <outlet property="backdropImageView" destination="EE8-LQ-db5" id="Pdm-zy-xaA"/>
                         <outlet property="likeButton" destination="mtn-og-lzY" id="AeN-yM-jQj"/>
+                        <outlet property="mainStackView" destination="GQi-Kw-cfx" id="Ys4-IU-8F1"/>
                         <outlet property="originalTitleLabel" destination="l4M-s3-3SJ" id="Aph-59-Xsc"/>
                         <outlet property="popularityLabel" destination="oeK-fU-RRf" id="8sO-sL-dnP"/>
                         <outlet property="posterImageView" destination="UVm-oW-Rh9" id="nf1-2l-rlP"/>
